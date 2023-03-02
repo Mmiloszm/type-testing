@@ -1,0 +1,40 @@
+.search {
+  text-align: center;
+  label {
+    display: block;
+    color: white;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 50px;
+  }
+
+  input {
+    font-family: inherit;
+    font-size: 1.4rem;
+    padding: 0.25em;
+    display: block;
+    margin: 3em auto;
+    border: none;
+    width: 20%;
+    height: 2em;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  input:focus {
+    outline-style: solid;
+    outline-color: green;
+    outline-width: 2px;
+  }
+
+  button {
+    font-style: inherit;
+    font-weight: 700;
+    width: 5em;
+    height: 2.5em;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
