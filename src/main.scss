@@ -5,3 +5,10 @@ html {
   height: 100vh;
   overflow: hidden;
 }
+
+//small devices mixin
+@mixin sm {
+  @media (max-width: 576px) {
+    @content;
+  }
+}
