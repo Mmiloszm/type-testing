@@ -1,0 +1,25 @@
+@import "../../main.scss";
+
+.wrapper-input {
+  input {
+    font-family: inherit;
+    font-size: 1.4rem;
+    padding: 0.25em;
+    display: block;
+    margin: 3em auto;
+    border: none;
+    width: 40%;
+    height: 1.5em;
+    border-radius: 10px;
+    text-align: center;
+    @include sm {
+      width: 70%;
+    }
+  }
+
+  input:focus {
+    outline-style: solid;
+    outline-color: green;
+    outline-width: 2px;
+  }
+}

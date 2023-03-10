@@ -1,4 +1,6 @@
 import { useState } from "react";
+import TestInput from "../TestInput/TestInput";
+import TestParagraph from "../TestParagraph/TestParagraph";
 import "./style.scss";
 
 const testString =
@@ -14,13 +16,14 @@ type TextPartsType = {
 
 const TestForm = () => {
   const [stride, setStride] = useState(10);
+  const [inputText, setInputText] = useState<string[]>([]);
   const [textParts, setTextParts] = useState<TextPartsType>({
     upperText: [],
     mainText: parts.slice(0, stride),
     bottomText: parts.slice(stride, stride + stride),
   });
 
-  const handleText = (newStride: number) => {
+  const handleTextParts = (newStride: number) => {
     const newTextParts: TextPartsType = {
       upperText: textParts.mainText,
       mainText: textParts.bottomText,
@@ -29,31 +32,38 @@ const TestForm = () => {
     setTextParts(newTextParts);
   };
 
+  const handleInput = (text: string[]) => {
+    setInputText(text);
+  };
+
   return (
     <section className="typing-test">
       <div className="test-paragraphs">
-        <p className="non-active-text">{textParts.upperText.join(" ")}</p>
-        <p className="active-text">
-          {textParts.mainText.map((word, index) => (
-            <span key={index}>{word + " "}</span>
-          ))}
-        </p>
-        <p className="non-active-text">{textParts.bottomText.join(" ")}</p>
+        <TestParagraph
+          textParts={textParts.upperText}
+          className="non-active-text"
+        />
+        <TestParagraph
+          textParts={textParts.mainText}
+          className="active-text"
+          inputText={inputText}
+        />
+        <TestParagraph
+          textParts={textParts.bottomText}
+          className="non-active-text"
+        />
       </div>
-      <div className="wrapper-input">
-        <label htmlFor="words">
-          <input type="text" name="words" id="words" />
-        </label>
-        <button
-          onClick={() => {
-            const newStride = stride + 10;
-            handleText(newStride);
-            setStride(newStride);
-          }}
-        >
-          Click
-        </button>
-      </div>
+      <TestInput handleInput={handleInput} />
+      <span>{inputText}</span>
+      <button
+        onClick={() => {
+          const newStride = stride + 10;
+          handleTextParts(newStride);
+          setStride(newStride);
+        }}
+      >
+        Click
+      </button>
     </section>
   );
 };
