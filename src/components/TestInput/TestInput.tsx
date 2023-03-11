@@ -1,20 +1,24 @@
+import { memo } from "react";
 import "./style.scss";
 
 type TestInputProps = {
-  handleInput: (text: string[]) => void;
+  handleInput: (text: string) => void;
+  inputValue: string;
 };
 
-const TestInput = ({ handleInput }: TestInputProps) => {
+const TestInput = ({ handleInput, inputValue }: TestInputProps) => {
   return (
     <div className="wrapper-input">
       <label htmlFor="words">
         <input
           type="text"
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           name="words"
           id="words"
+          value={inputValue}
           onChange={(e) => {
-            const splitted = e.target.value.split(/\s+/);
-            handleInput(splitted);
+            handleInput(e.target.value);
           }}
         />
       </label>
@@ -22,4 +26,4 @@ const TestInput = ({ handleInput }: TestInputProps) => {
   );
 };
 
-export default TestInput;
+export default memo(TestInput);

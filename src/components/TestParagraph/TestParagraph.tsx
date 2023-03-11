@@ -1,3 +1,4 @@
+import { memo } from "react";
 import "./style.scss";
 
 type TestParagraphProps = {
@@ -13,16 +14,23 @@ const TestParagraph = ({
 }: TestParagraphProps) => {
   const assignClass = (word: string, index: number) => {
     if (inputText) {
+      if (inputText.length - 1 == index) {
+        return (
+          <span key={index} className={"current"}>
+            {word + " "}
+          </span>
+        );
+      }
       if (inputText.length - 1 > index) {
         if (inputText[index] === textParts[index]) {
           return (
-            <span key={index} style={{ color: "green" }}>
+            <span key={index} className="correct-word">
               {word + " "}
             </span>
           );
         }
         return (
-          <span key={index} style={{ color: "red" }}>
+          <span key={index} className="incorrect-word">
             {word + " "}
           </span>
         );
@@ -38,4 +46,4 @@ const TestParagraph = ({
   );
 };
 
-export default TestParagraph;
+export default memo(TestParagraph);
