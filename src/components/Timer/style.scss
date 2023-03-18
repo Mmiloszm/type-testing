@@ -1,0 +1,25 @@
+.timer-wrapper {
+  width: 4em;
+  height: 4em;
+  margin: 5em auto 0;
+  border-radius: 100px;
+  border-color: white;
+  border: 0.4em solid #cccac6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .timer {
+    font-size: 1.7rem;
+    font-weight: bold;
+    display: block;
+  }
+  .timer-red {
+    color: #d93447;
+  }
+  .timer-green {
+    color: green;
+  }
+  .timer-orange {
+    color: orange;
+  }
+}

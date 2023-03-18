@@ -11,6 +11,7 @@ const TestInput = ({ handleInput, inputValue }: TestInputProps) => {
     <div className="wrapper-input">
       <label htmlFor="words">
         <input
+          placeholder="Start typing to get started"
           type="text"
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus

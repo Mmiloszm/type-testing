@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { TextPartsType } from "../../types/types";
 import TestParagraph from "../TestParagraph/TestParagraph";
 import "./style.scss";
@@ -23,4 +24,4 @@ const ParagraphCarousel = ({
   );
 };
 
-export default ParagraphCarousel;
+export default memo(ParagraphCarousel);

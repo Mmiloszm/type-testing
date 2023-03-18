@@ -1,12 +1,11 @@
-import { useCallback, useContext, useState, useEffect } from "react";
+import { useCallback, useContext, useState, useEffect, useMemo } from "react";
 import TestInput from "../TestInput/TestInput";
 import "./style.scss";
 import { handleTextParts } from "../../helpers/handleTextParts";
 import { ScoreContext } from "../../context/Score";
 import { handleScore } from "../../helpers/handleScore";
-import { FormStateType, TextPartsType } from "../../types/types";
+import { TextPartsType } from "../../types/types";
 import ParagraphCarousel from "../ParagraphCarousel/ParagraphCarousel";
-import { useCountdown } from "../../hooks/useCountdown";
 import Timer from "../Timer/Timer";
 
 const testString =
@@ -14,7 +13,17 @@ const testString =
 
 const parts = testString.split(/\s+/);
 
-const TestForm = () => {
+type TestFormProps = {
+  countdownTime: number;
+  handleCountdownStart: (start: boolean) => void;
+  subject: string;
+};
+
+const TestForm = ({
+  countdownTime,
+  handleCountdownStart,
+  subject,
+}: TestFormProps) => {
   const [stride, setStride] = useState(10);
   const [inputText, setInputText] = useState("");
   const [textParts, setTextParts] = useState<TextPartsType>({
@@ -22,11 +31,8 @@ const TestForm = () => {
     mainText: parts.slice(0, stride),
     bottomText: parts.slice(stride, stride + stride),
   });
-  const [startCountdown, setStartCountdown] = useState(false);
-  const [formState, setFormState] = useState<FormStateType>("before");
   const { score, setScore } = useContext(ScoreContext);
-  const inputTextParts = inputText.split(/\s+/);
-  const countdownTime = useCountdown(startCountdown);
+  const inputTextParts = useMemo(() => inputText.split(/\s+/), [inputText]);
 
   useEffect(() => {
     if (inputTextParts.length - 1 === textParts.mainText.length) {
@@ -39,10 +45,8 @@ const TestForm = () => {
   }, [setScore, score, stride, inputTextParts, textParts]);
 
   useEffect(() => {
-    if (countdownTime === 0) {
-      setFormState("finished");
-    }
-  }, [countdownTime]);
+    if (inputText.length) handleCountdownStart(true);
+  }, [inputText, handleCountdownStart]);
 
   const handleInput = useCallback((text: string) => {
     setInputText(text);
@@ -57,18 +61,7 @@ const TestForm = () => {
         bottomText={textParts.bottomText}
         inputTextParts={inputTextParts}
       />
-      {formState === "before" ? (
-        <button
-          onClick={() => {
-            setStartCountdown(true);
-            setFormState("started");
-          }}
-        >
-          Start
-        </button>
-      ) : (
-        <TestInput handleInput={handleInput} inputValue={inputText} />
-      )}
+      <TestInput handleInput={handleInput} inputValue={inputText} />
     </section>
   );
 };

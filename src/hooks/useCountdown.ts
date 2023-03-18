@@ -6,6 +6,10 @@ export const useCountdown = (startCountdown: boolean) => {
   useEffect(() => {
     let timeout: number;
 
+    if (!startCountdown) {
+      setCountdownTime(60);
+    }
+
     if (startCountdown && countdownTime > 0) {
       timeout = setTimeout(() => {
         setCountdownTime(countdownTime - 1);
