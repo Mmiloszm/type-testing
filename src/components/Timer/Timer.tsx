@@ -7,8 +7,8 @@ const Timer = ({ countdownTime }: { countdownTime: number }) => {
     return "timer-red";
   };
   return (
-    <div className="timer-wrapper">
-      <span className={`timer ${setTimerColor()}`}>{countdownTime}</span>
+    <div className={`timer-wrapper ${setTimerColor()}`}>
+      <span className={`timer`}>{countdownTime}</span>
     </div>
   );
 };

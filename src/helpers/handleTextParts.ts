@@ -1,14 +1,16 @@
-import { TextPartsType } from "../types/types";
+import { TextParts } from "../types/TextParts";
 
 export const handleTextParts = (
   newStride: number,
-  currentTextParts: TextPartsType,
+  currentTextParts: TextParts,
   text: string[]
 ) => {
-  const newTextParts: TextPartsType = {
+  const newTextParts: TextParts = {
     upperText: currentTextParts.mainText,
     mainText: currentTextParts.bottomText,
     bottomText: text.slice(newStride, newStride + 10),
   };
+  console.log(currentTextParts);
+  console.log(text);
   return newTextParts;
 };

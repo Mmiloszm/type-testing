@@ -1,9 +1,9 @@
 import { memo } from "react";
-import { TextPartsType } from "../../types/types";
+import { TextParts } from "../../types/TextParts";
 import TestParagraph from "../TestParagraph/TestParagraph";
 import "./style.scss";
 
-type ParagraphCarouselProps = TextPartsType & { inputTextParts: string[] };
+type ParagraphCarouselProps = TextParts & { inputTextParts: string[] };
 
 const ParagraphCarousel = ({
   upperText,

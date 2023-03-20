@@ -4,14 +4,13 @@ import "./style.scss";
 import { handleTextParts } from "../../helpers/handleTextParts";
 import { ScoreContext } from "../../context/Score";
 import { handleScore } from "../../helpers/handleScore";
-import { TextPartsType } from "../../types/types";
+import { TextParts } from "../../types/TextParts";
 import ParagraphCarousel from "../ParagraphCarousel/ParagraphCarousel";
 import Timer from "../Timer/Timer";
-
-const testString =
-  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil sit facilis fugit voluptatem, dolore autem earum nostrum consectetur quo laboriosam quasi placeat illum assumenda porro obcaecati delectus blanditiis amet odio nobis eos magnam aliquid. Voluptate odit eligendi fugit mollitia odio quae officiis distinctio aperiam voluptatem temporibus repellat placeat dicta, impedit quas iste necessitatibus optio, ipsum quaerat iure? Voluptatibus quos eligendi pariatur quisquam et tenetur non, ut temporibus fugit. Aperiam, quasi?";
-
-const parts = testString.split(/\s+/);
+import { useQuery } from "@tanstack/react-query";
+import getText from "../../services/TextService";
+import { initTextParts } from "../../helpers/initTextParts";
+import { generatePlaceholderText } from "../../helpers/generatePlaceholderText";
 
 type TestFormProps = {
   countdownTime: number;
@@ -24,25 +23,39 @@ const TestForm = ({
   handleCountdownStart,
   subject,
 }: TestFormProps) => {
+  const [isAbleToSetNewText, setIsAbleToSetNewText] = useState(true);
+  let parts = useMemo(() => generatePlaceholderText(), []);
+  const { data, isLoading, isFetched } = useQuery(["text", subject], getText);
   const [stride, setStride] = useState(10);
   const [inputText, setInputText] = useState("");
-  const [textParts, setTextParts] = useState<TextPartsType>({
-    upperText: [],
-    mainText: parts.slice(0, stride),
-    bottomText: parts.slice(stride, stride + stride),
-  });
+  const [textParts, setTextParts] = useState<TextParts>(() =>
+    initTextParts(parts)
+  );
   const { score, setScore } = useContext(ScoreContext);
   const inputTextParts = useMemo(() => inputText.split(/\s+/), [inputText]);
 
   useEffect(() => {
     if (inputTextParts.length - 1 === textParts.mainText.length) {
+      console.log(parts);
       const newStride = stride + 10;
       setScore(() => handleScore(textParts.mainText, inputTextParts, score));
       setInputText("");
-      setTextParts(() => handleTextParts(newStride, textParts, parts));
+      const newParts = data?.choices[0].text.trim().split(/\s+/);
+      if (newParts) {
+        setTextParts(() => handleTextParts(newStride, textParts, newParts));
+      }
+
       setStride(newStride);
     }
-  }, [setScore, score, stride, inputTextParts, textParts]);
+  }, [
+    setScore,
+    score,
+    stride,
+    inputTextParts,
+    textParts,
+    parts,
+    data?.choices,
+  ]);
 
   useEffect(() => {
     if (inputText.length) handleCountdownStart(true);
@@ -51,6 +64,20 @@ const TestForm = ({
   const handleInput = useCallback((text: string) => {
     setInputText(text);
   }, []);
+
+  if (isLoading) {
+    return <h1>Loading</h1>;
+  }
+
+  if (isFetched && isAbleToSetNewText) {
+    const newParts = data?.choices[0].text.trim().split(/\s+/);
+    if (newParts) {
+      const temp = initTextParts(newParts);
+      setTextParts(temp);
+      parts = newParts;
+      setIsAbleToSetNewText(false);
+    }
+  }
 
   return (
     <section className="typing-test">

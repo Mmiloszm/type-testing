@@ -4,10 +4,7 @@ import TestForm from "../TestForm/TestForm";
 import { ScoreProvider } from "../../context/Score";
 import { useCallback, useState } from "react";
 import { useCountdown } from "../../hooks/useCountdown";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Scoreboard from "../Scoreboard/Scoreboard";
-
-const queryClient = new QueryClient();
 
 const App = () => {
   const [startCountdown, setStartCountdown] = useState(false);
@@ -20,21 +17,19 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ScoreProvider>
-        {!subject && <SubjectSelection handleSubject={setSubject} />}
-        {subject && countdownTime !== 0 && (
-          <TestForm
-            countdownTime={countdownTime}
-            handleCountdownStart={setStartCountdown}
-            subject={subject}
-          />
-        )}
-        {subject && countdownTime === 0 && (
-          <Scoreboard handleResetTest={handleResetTest} />
-        )}
-      </ScoreProvider>
-    </QueryClientProvider>
+    <ScoreProvider>
+      {!subject && <SubjectSelection setSubject={setSubject} />}
+      {subject && countdownTime !== 0 && (
+        <TestForm
+          countdownTime={countdownTime}
+          handleCountdownStart={setStartCountdown}
+          subject={subject}
+        />
+      )}
+      {subject && countdownTime === 0 && (
+        <Scoreboard handleResetTest={handleResetTest} />
+      )}
+    </ScoreProvider>
   );
 };
 

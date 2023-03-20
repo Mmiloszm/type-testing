@@ -1,12 +1,13 @@
+import { Dispatch } from "react";
 import "./style.scss";
 
 const SubjectSelection = ({
-  handleSubject,
+  setSubject,
 }: {
-  handleSubject: (subject: string) => void;
+  setSubject: Dispatch<React.SetStateAction<string>>;
 }) => {
   return (
-    <div className="search">
+    <section className="search">
       <form
         autoComplete="off"
         onSubmit={(e) => {
@@ -14,7 +15,7 @@ const SubjectSelection = ({
           const formData = new FormData(e.currentTarget);
           const subject = formData.get("subject")?.toString();
           if (subject) {
-            handleSubject(subject);
+            setSubject(subject);
           }
         }}
       >
@@ -26,12 +27,12 @@ const SubjectSelection = ({
             spellCheck="false"
             minLength={3}
             maxLength={15}
-            pattern={"^[a-zA-Z]*$"}
+            pattern={"^w+{2,14}*$"}
           />
         </label>
         <button>Play</button>
       </form>
-    </div>
+    </section>
   );
 };
 

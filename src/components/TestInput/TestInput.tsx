@@ -15,8 +15,10 @@ const TestInput = ({ handleInput, inputValue }: TestInputProps) => {
           type="text"
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
+          autoComplete="off"
           name="words"
           id="words"
+          spellCheck="false"
           value={inputValue}
           onChange={(e) => {
             handleInput(e.target.value);
