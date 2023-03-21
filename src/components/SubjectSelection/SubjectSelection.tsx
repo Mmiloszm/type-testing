@@ -27,7 +27,6 @@ const SubjectSelection = ({
             spellCheck="false"
             minLength={3}
             maxLength={15}
-            pattern={"^w+{2,14}*$"}
           />
         </label>
         <button>Play</button>

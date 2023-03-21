@@ -36,7 +36,6 @@ const TestForm = ({
 
   useEffect(() => {
     if (inputTextParts.length - 1 === textParts.mainText.length) {
-      console.log(parts);
       const newStride = stride + 10;
       setScore(() => handleScore(textParts.mainText, inputTextParts, score));
       setInputText("");
@@ -66,7 +65,11 @@ const TestForm = ({
   }, []);
 
   if (isLoading) {
-    return <h1>Loading</h1>;
+    return (
+      <div className=" loader-wrapper">
+        <span className="loader"></span>
+      </div>
+    );
   }
 
   if (isFetched && isAbleToSetNewText) {
