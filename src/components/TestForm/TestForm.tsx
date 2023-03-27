@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import getText from "../../services/TextService";
 import { initTextParts } from "../../helpers/initTextParts";
 import { generatePlaceholderText } from "../../helpers/generatePlaceholderText";
+import { useParagraphChange } from "../../hooks/useParagraphChange";
 
 type TestFormProps = {
   countdownTime: number;
@@ -26,7 +27,6 @@ const TestForm = ({
   const [isAbleToSetNewText, setIsAbleToSetNewText] = useState(true);
   let parts = useMemo(() => generatePlaceholderText(), []);
   const { data, isLoading, isFetched } = useQuery(["text", subject], getText);
-  const [stride, setStride] = useState(10);
   const [inputText, setInputText] = useState("");
   const [textParts, setTextParts] = useState<TextParts>(() =>
     initTextParts(parts)
@@ -34,27 +34,15 @@ const TestForm = ({
   const { score, setScore } = useContext(ScoreContext);
   const inputTextParts = useMemo(() => inputText.split(/\s+/), [inputText]);
 
-  useEffect(() => {
-    if (inputTextParts.length - 1 === textParts.mainText.length) {
-      const newStride = stride + 10;
-      setScore(() => handleScore(textParts.mainText, inputTextParts, score));
-      setInputText("");
-      const newParts = data?.choices[0].text.trim().split(/\s+/);
-      if (newParts) {
-        setTextParts(() => handleTextParts(newStride, textParts, newParts));
-      }
-
-      setStride(newStride);
-    }
-  }, [
-    setScore,
-    score,
-    stride,
-    inputTextParts,
-    textParts,
-    parts,
-    data?.choices,
-  ]);
+  useParagraphChange({
+    score: score,
+    setScore: setScore,
+    inputTextParts: inputTextParts,
+    textParts: textParts,
+    data: data,
+    setInputText: setInputText,
+    setTextParts: setTextParts,
+  });
 
   useEffect(() => {
     if (inputText.length) handleCountdownStart(true);
